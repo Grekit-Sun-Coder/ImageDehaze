@@ -22,4 +22,13 @@
     <style name="NavigationTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
     </style>
+
+    <style name="iphone_progress_dialog" parent="@android:style/Theme.Dialog">    //构造方法中
+        <item name="android:windowFrame">@null</item> <!--Dialog的windowFrame框为无 -->
+        <item name="android:windowIsFloating">true</item><!-- 是否漂现在activity上 -->
+        <item name="android:windowIsTranslucent">true</item><!-- 是否半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>    //模糊
+<!--        <item name="android:windowBackground">@drawable/load_bg</item>   //dialog背景-->
+    </style>
 </resources>

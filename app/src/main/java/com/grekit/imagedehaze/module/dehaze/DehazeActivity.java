@@ -3,10 +3,10 @@ package com.grekit.imagedehaze.module.dehaze;
 
 import android.content.Intent;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
@@ -94,11 +94,32 @@ public class DehazeActivity extends BaseActivity<DehazePresenter, IDehazeView> i
     }
 
     private void init() {
-        mCamera = Camera.open(0);
-        CameraPreview preview = new CameraPreview(this, mCamera);
-        mOverCameraView = new OverCameraView(this);
-        mPreviewLayout.addView(preview);
-        mPreviewLayout.addView(mOverCameraView);
+//        mCamera = Camera.open();
+//        CameraPreview preview = new CameraPreview(this, mCamera);
+//        mOverCameraView = new OverCameraView(this);
+//        mPreviewLayout.addView(preview);
+//        mPreviewLayout.addView(mOverCameraView);
+        File mediaFile = null;
+        String cameraPath;
+        try {
+            File mediaStorageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+            if (!mediaStorageDir.exists()) {
+                if (!mediaStorageDir.mkdirs()) {
+                    return;
+                }
+            }
+            mediaFile = new File(mediaStorageDir.getPath()
+                    + File.separator
+                    + "Pictures/temp.jpg");//注意这里需要和filepaths.xml中配置的一样
+            cameraPath = mediaFile.getAbsolutePath();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri imageUri = Uri.fromFile(mediaFile);
+        openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(openCameraIntent, 1);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -135,9 +156,12 @@ public class DehazeActivity extends BaseActivity<DehazePresenter, IDehazeView> i
 //            mPhotoLayout.setVisibility(View.GONE);
 //            mConfirmLayout.setVisibility(View.VISIBLE);
 //            AnimSpring.getInstance(mConfirmLayout).startRotateAnim(120, 360);
-            mPresenter.dehazeImage(data);
+//            mPresenter.dehazeImage(data);
             //停止预览
             mCamera.stopPreview();
+            savePhoto(data);
+            mPreviewLayout.removeAllViews();
+            mPreviewLayout.addView(mOverCameraView);
         });
     }
 

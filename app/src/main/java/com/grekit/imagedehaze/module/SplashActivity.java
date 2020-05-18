@@ -12,6 +12,7 @@ import com.grekit.imagedehaze.R;
 import com.grekit.imagedehaze.base.BaseActivity;
 import com.grekit.imagedehaze.helper.PermissionHelper;
 import com.grekit.imagedehaze.module.dehaze.DehazeActivity;
+import com.grekit.imagedehaze.module.selectImage.SelectImageActivity;
 import com.yanzhenjie.permission.Action;
 
 import java.util.List;
@@ -88,7 +89,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter,ISplashView> im
     private void skipToMainActivity() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             //跳入主界面
-            Intent intent = new Intent(this, DehazeActivity.class);
+            Intent intent = new Intent(this, SelectImageActivity.class);
             startActivity(intent);
             finishActivity();
         }
